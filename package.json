@@ -4,7 +4,8 @@
   "description": "Mimics the behavior of a real rice cooker through command line interface.",
   "main": "main.js",
   "scripts": {
-    "start": "node ./src/main.js"
+    "start": "node ./src/main.js",
+    "lint": "eslint src"
   },
   "type": "module",
   "repository": {
@@ -16,5 +17,12 @@
   "bugs": {
     "url": "https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023/issues"
   },
-  "homepage": "https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023#readme"
+  "homepage": "https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023#readme",
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "node": "^18.18.2"
+  }
 }

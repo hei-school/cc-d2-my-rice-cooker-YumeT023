@@ -1,1 +1,1 @@
-console.log("Rice Cooker");
+console.log('Rice Cooker');
