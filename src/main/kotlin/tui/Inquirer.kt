@@ -8,10 +8,9 @@ object Inquirer {
 
     fun promptMenu(menu: List<String>): String {
         if (menu.isNotEmpty()) {
-            for (i in 1..menu.size) {
-                println("$i - ${menu[i]}")
+            for (i in menu.indices) {
+                println("${i + 1} - ${menu[i]}")
             }
-            println()
             val answer = prompt("Choose")
             if (answer != null) {
                 val idx = answer.toInt()

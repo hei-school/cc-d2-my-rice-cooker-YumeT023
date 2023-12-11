@@ -43,6 +43,17 @@ class RiceCooker(val capacity: Float? = DEFAULT_RICE_COOKER_CAPACITY) {
         waterCup += cup
     }
 
+    fun cookRawFood() {
+        if (isFoodReadyToServe) {
+            Printer.info("Food is ready to be served, empty the inner pot to cook other")
+            return;
+        }
+        println("Cooking..., [WARN] for your security, don't try to cancel the operation")
+        Thread.sleep((getEstimatedCookSeconds() * 1_000).toLong())
+        println("Food is ready to be served")
+        isFoodReadyToServe = true;
+    }
+
     fun getCooked() {
         if (!isLidOpen) {
             Printer.info("Consider removing the inner port's cover")
@@ -67,6 +78,8 @@ class RiceCooker(val capacity: Float? = DEFAULT_RICE_COOKER_CAPACITY) {
             }
         }
     }
+
+    private fun getEstimatedCookSeconds() = riceCup * 5 /* 5s per cup */
 
     private fun getRecommendedWaterToRice() = riceCup * WATER_TO_RICE_RATIO
 

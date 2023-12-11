@@ -1,9 +1,12 @@
 import core.RiceCooker
 import tui.Inquirer
 import tui.MenuManager
+import java.util.*
+
+val SCANNER = Scanner(System.`in`)
 
 fun getRiceCooker(): RiceCooker {
-    val capacity = Inquirer.prompt("What is the capacity of your rice cooker")
+    val capacity = Inquirer.prompt("What is the capacity of your rice cooker >")
     return RiceCooker(capacity?.toFloatOrNull())
 }
 
@@ -35,7 +38,7 @@ fun main(args: Array<String>) {
             }
 
             "Begin cooking" -> {
-                // cooker.cook()
+                cooker.cookRawFood()
             }
 
             "Get the ready-to-serve cook" -> cooker.getCooked()
@@ -43,6 +46,7 @@ fun main(args: Array<String>) {
                 println("Exited")
                 exit = true
             }
+
             else -> println("Unknown menu")
         }
     }
