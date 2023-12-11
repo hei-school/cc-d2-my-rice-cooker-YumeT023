@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
                 cooker.logRecommendation()
                 val waterCup = Inquirer.prompt("water cup")
                 if (!waterCup.isNullOrEmpty()) {
-                    cooker.addRiceCup(waterCup.toFloat())
+                    cooker.addWaterCup(waterCup.toFloat())
                 }
             }
 
