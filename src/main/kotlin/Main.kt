@@ -1,6 +1,7 @@
 import core.RiceCooker
 import tui.Inquirer
 import tui.MenuManager
+import tui.Printer
 import java.util.*
 
 val SCANNER = Scanner(System.`in`)
@@ -12,6 +13,7 @@ fun getRiceCooker(): RiceCooker {
 
 
 fun main(args: Array<String>) {
+    Printer.logo()
     val cooker = getRiceCooker()
 
     var exit = false
