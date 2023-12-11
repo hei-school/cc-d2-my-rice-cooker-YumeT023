@@ -1,4 +1,5 @@
 import {DEFAULT_RICE_COOKER_CAPACITY_CUP} from './constants.js';
+import {getRecommendedWaterToRice} from './rice_to_water_ratio.js';
 
 /**
  * This class simulates the behavior of a real rice cooker
@@ -6,6 +7,8 @@ import {DEFAULT_RICE_COOKER_CAPACITY_CUP} from './constants.js';
 export class RiceCooker {
   #isPlugged;
   #isLidOpen;
+  #riceCup;
+  #waterCup;
   capacity;
 
   /**
@@ -15,6 +18,8 @@ export class RiceCooker {
   constructor(capacity = DEFAULT_RICE_COOKER_CAPACITY_CUP) {
     this.#isPlugged = false;
     this.#isLidOpen = false;
+    this.#waterCup = 0;
+    this.#riceCup = 0;
     this.capacity = capacity;
   }
 
@@ -43,6 +48,7 @@ export class RiceCooker {
       return;
     }
     this.#isLidOpen = isOpen;
+    this.logRecommendation();
   }
 
   /**
@@ -53,6 +59,44 @@ export class RiceCooker {
       main: this.#isPlugged ? 'plugged' : 'unplugged',
       lid: this.#isLidOpen ? 'opened' : 'closed',
     };
+  }
+
+  /**
+   * recommends different things like: cup of water
+   */
+  logRecommendation() {
+    if (this.#isLidOpen) {
+      if (!this.#riceCup) {
+        console.log('[RECOMMENDATION] Begin by placing raw food now');
+      } else {
+        const water = getRecommendedWaterToRice(this.#riceCup);
+        console.log('rec', water, 'actual', this.#waterCup);
+        if (water !== this.#waterCup) {
+          console.log('[RECOMMENDATION] For the actual cup of rice ' +
+          water + ' cup of water is the ideal for a well cooked rice:D');
+        } else {
+          console.log('[RECOMMENDATION] You\'re already good to go');
+        }
+      }
+    }
+  }
+
+  /**
+   * place raw food in the inner pot
+   * @param {number} riceCup
+   */
+  addRice(riceCup = 0) {
+    console.log('added rice up: ', riceCup);
+    this.#riceCup += riceCup;
+    this.logRecommendation();
+  }
+
+  /**
+   * @param {number} waterCup
+   */
+  addWater(waterCup = 0) {
+    this.#waterCup += waterCup;
+    this.logRecommendation();
   }
 
   /**

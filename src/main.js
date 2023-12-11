@@ -11,13 +11,18 @@ import {RiceCooker} from './lib/core/rice_cooker.js';
  */
 const getMenu = (cooker) => {
   const menu = [];
-  if (!cooker.isPlugged) {
-    menu.push('Open lid', 'Close lid');
-  }
-  if (!cooker.isLidOpen) {
+
+  if (cooker.isLidOpen) {
+    menu.push('Place raw food in the inner pot', 'Add water');
+  } else {
     menu.push('Plug', 'Unplug');
   }
-  menu.push('Exit');
+
+  if (cooker.isPlugged) {/* Empty */} else {
+    menu.push('Open lid', 'Close lid');
+  }
+
+  menu.push('Done');
   return menu;
 };
 
@@ -54,7 +59,18 @@ async function main() {
       case 'Close lid':
         cooker.setIsLidOpen(false);
         break;
-      case 'Exit':
+      case 'Place raw food in the inner pot': {
+        const riceCup = await promptAsync('cup of rice');
+        cooker.addRice(+riceCup);
+      }
+        break;
+      case 'Add water': {
+        cooker.logRecommendation();
+        const waterCup = await promptAsync('water cup');
+        cooker.addWater(+waterCup);
+      }
+        break;
+      case 'Done':
         console.log('Exited');
         exit = true;
         break;
