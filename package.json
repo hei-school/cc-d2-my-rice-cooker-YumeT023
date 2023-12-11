@@ -1,0 +1,20 @@
+{
+  "name": "rice-cooker",
+  "version": "1.0.0",
+  "description": "Mimics the behavior of a real rice cooker through command line interface.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ./src/main.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023.git"
+  },
+  "keywords": [],
+  "author": "yumii.saiko <yumii.saiko@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023/issues"
+  },
+  "homepage": "https://github.com/hei-school/cc-d2-my-rice-cooker-YumeT023#readme"
+}
