@@ -1,4 +1,6 @@
+import {waitOrAbort} from '../tui/prompt.js';
 import {DEFAULT_RICE_COOKER_CAPACITY_CUP} from './constants.js';
+import {getEstimatedCookDurationByFoodCupSeconds} from './cooking.js';
 import {getRecommendedWaterToRice} from './rice_to_water_ratio.js';
 
 /**
@@ -9,6 +11,7 @@ export class RiceCooker {
   #isLidOpen;
   #riceCup;
   #waterCup;
+  #cooked;
   capacity;
 
   /**
@@ -20,6 +23,7 @@ export class RiceCooker {
     this.#isLidOpen = false;
     this.#waterCup = 0;
     this.#riceCup = 0;
+    this.#cooked = false;
     this.capacity = capacity;
   }
 
@@ -65,6 +69,11 @@ export class RiceCooker {
    * recommends different things like: cup of water
    */
   logRecommendation() {
+    if (this.#cooked) {
+      console.log('[RECOMMENDATION] You can get the ready-to-serve cook now');
+      return;
+    }
+
     if (this.#isLidOpen) {
       if (!this.#riceCup) {
         console.log('[RECOMMENDATION] Begin by placing raw food now');
@@ -82,11 +91,23 @@ export class RiceCooker {
   }
 
   /**
+   * Get the ready to serve food
+   */
+  getCooked() {
+    if (!this.#isLidOpen) {
+      console.log('[HINT] consider opening the lid of the inner pot');
+      return;
+    }
+    this.#cooked = false;
+    this.#riceCup = 0;
+    this.#waterCup = 0;
+  }
+
+  /**
    * place raw food in the inner pot
    * @param {number} riceCup
    */
   addRice(riceCup = 0) {
-    console.log('added rice up: ', riceCup);
     this.#riceCup += riceCup;
     this.logRecommendation();
   }
@@ -97,6 +118,37 @@ export class RiceCooker {
   addWater(waterCup = 0) {
     this.#waterCup += waterCup;
     this.logRecommendation();
+  }
+
+  /**
+   * Begin cooking
+   */
+  async cook() {
+    const timeMilliS =
+        getEstimatedCookDurationByFoodCupSeconds(this.#riceCup) * 1_000;
+
+    const cancelled = await waitOrAbort(timeMilliS, function onStart() {
+      console.log('Cooking..., [WARN] for your security, don\'t ' +
+      'try to cancel');
+    });
+
+    console.log('is_cancelled', cancelled);
+
+    if (cancelled) {
+      console.log('[DANGEROUS] Do not use this option ' +
+        'too often for your security');
+      return;
+    }
+
+    this.#cooked = true;
+    this.logRecommendation();
+  }
+
+  /**
+   * @return {boolean}
+   */
+  get isReadyToServe() {
+    return this.#cooked;
   }
 
   /**
@@ -111,5 +163,19 @@ export class RiceCooker {
    */
   get isLidOpen() {
     return this.#isLidOpen;
+  }
+
+  /**
+   * @return {number}
+   */
+  get riceCup() {
+    return this.#riceCup;
+  }
+
+  /**
+   * @return {number}
+   */
+  get waterCup() {
+    return this.#waterCup;
   }
 }

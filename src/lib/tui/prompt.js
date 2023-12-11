@@ -9,20 +9,12 @@ export const rl = Readline.createInterface({
 // now, I can listen to Stdin keypress
 Readline.emitKeypressEvents(process.stdin);
 
-export const ac = new AbortController();
-const signal = ac.signal;
-
-signal.addEventListener('abort', () => {
-  rl.close();
-  process.stdin.removeAllListeners('keypress');
-}, {once: true});
-
 /**
  * @param {string} query
  * @param {function(string)} cb
  */
 export function prompt(query, cb) {
-  rl.question(`${query}\n> `, {signal}, (answer) => {
+  rl.question(`${query}\n> `, (answer) => {
     cb(answer);
   });
 }
@@ -38,52 +30,37 @@ export function promptAsync(query) {
   });
 }
 
-/**
- * @param {string} description
- * @param {number} timeout
- * @param {function()} onCancel
- * @param {function()} onSuccess
- */
-export async function waitOrCancel(
-    description,
-    timeout,
-    onCancel,
-    onSuccess,
-) {
-  /** @type number */
-  let intervalMs = null;
 
-  /**
-   * @param {string} key
-   */
-  const doCancel = (key) => {
-    if (key === 'x') {
+/**
+ * @param {number} milliseconds
+ * @param {function()?} onStart
+ * @return {Promise<boolean>} if it's cancelled or not
+ */
+export const waitOrAbort = async (milliseconds, onStart) => {
+  // scheduler.wait(milliseconds);
+  rl.setPrompt('Press any key to cancel: ');
+  const ac = new AbortController();
+  const signal = ac.signal;
+
+  return await new Promise((resolve) => {
+    const abort = () => {
+      rl.pause();
       ac.abort();
       console.log('\n');
-      intervalMs && clearInterval(intervalMs);
-      onCancel();
-    }
-  };
+    };
 
-  prompt('\n', () => {}); // listen for keypress
+    process.stdin.once('keypress', abort);
 
-  process.stdin.on('keypress', doCancel);
+    // start
+    onStart && onStart();
+    rl.prompt();
 
-  console.log(description, '(Cancel anytime with \'x\')');
-
-  let time = 0;
-  intervalMs = setInterval(() => {
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(`time: ${time}ms`);
-    time += 100;
-  }, 100);
-
-  try {
-    await scheduler.wait(timeout, {signal});
-    console.log('\n');
-    intervalMs && clearInterval(intervalMs);
-    onSuccess();
-  } catch {/* empty */}
-  ac.abort();
-}
+    scheduler.wait(milliseconds, {signal})
+        .then(() => {
+          rl.pause();
+          resolve(false);
+          process.stdin.off('keypress', abort);
+        })
+        .catch(() => resolve(true));
+  });
+};

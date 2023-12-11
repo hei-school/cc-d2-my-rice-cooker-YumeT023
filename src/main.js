@@ -1,6 +1,6 @@
 // TODO: unify export with index_file
-import {promptMenu} from './lib/tui/prompt_capabilities.js';
-import {ac, promptAsync} from './lib/tui/prompt.js';
+import {promptMenu} from './lib/tui/prompt_utils.js';
+import {promptAsync, rl} from './lib/tui/prompt.js';
 import {printLogo} from './lib/tui/print.js';
 import {RiceCooker} from './lib/core/rice_cooker.js';
 
@@ -13,9 +13,16 @@ const getMenu = (cooker) => {
   const menu = [];
 
   if (cooker.isLidOpen) {
-    menu.push('Place raw food in the inner pot', 'Add water');
+    if (cooker.isReadyToServe) {
+      menu.push('Get the ready-to-serve cook');
+    } else {
+      menu.push('Place raw food in the inner pot', 'Add water');
+    }
   } else {
     menu.push('Plug', 'Unplug');
+    if (cooker.isPlugged && cooker.riceCup && cooker.riceCup) {
+      menu.push('Begin cooking');
+    }
   }
 
   if (cooker.isPlugged) {/* Empty */} else {
@@ -70,6 +77,13 @@ async function main() {
         cooker.addWater(+waterCup);
       }
         break;
+      case 'Begin cooking': {
+        await cooker.cook();
+      }
+        break;
+      case 'Get the ready-to-serve cook':
+        cooker.getCooked();
+        break;
       case 'Done':
         console.log('Exited');
         exit = true;
@@ -79,7 +93,7 @@ async function main() {
         break;
     }
   }
-  ac.abort();
+  rl.close();
 }
 
 main();
