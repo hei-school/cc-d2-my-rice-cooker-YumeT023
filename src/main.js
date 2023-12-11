@@ -5,6 +5,23 @@ import {RiceCooker} from './lib/core/rice_cooker.js';
 import {ac} from './lib/tui/prompt.js';
 
 /**
+ * Gets menu according to the state of the rice cooker.
+ * @param {RiceCooker} cooker;
+ * @return {string[]}
+ */
+const getMenu = (cooker) => {
+  const menu = [];
+  if (!cooker.isPlugged) {
+    menu.push('Open lid', 'Close lid');
+  }
+  if (!cooker.isLidOpen) {
+    menu.push('Plug', 'Unplug');
+  }
+  menu.push('Exit');
+  return menu;
+};
+
+/**
  * entry point
  */
 async function main() {
@@ -14,13 +31,7 @@ async function main() {
 
   let exit = false;
   while (!exit) {
-    const menu = await promptMenu([
-      'Plug',
-      'Unplug',
-      'Open lid',
-      'Close lid',
-      'Exit',
-    ], {errMsg: 'no menu'});
+    const menu = await promptMenu(getMenu(cooker), {errMsg: 'no menu'});
 
     switch (menu) {
       case 'Plug':

@@ -49,4 +49,18 @@ export class RiceCooker {
       lid: this.#isLidOpen ? 'opened' : 'closed',
     };
   }
+
+  /**
+   * @return {boolean}
+   */
+  get isPlugged() {
+    return this.#isPlugged;
+  }
+
+  /**
+   * @return {boolean}
+   */
+  get isLidOpen() {
+    return this.#isLidOpen;
+  }
 }
