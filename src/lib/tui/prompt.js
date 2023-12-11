@@ -22,8 +22,7 @@ signal.addEventListener('abort', () => {
  * @param {function(string)} cb
  */
 export function prompt(query, cb) {
-  rl.question(query, {signal}, (answer) => {
-    ac.abort();
+  rl.question(`${query}\n> `, {signal}, (answer) => {
     cb(answer);
   });
 }
