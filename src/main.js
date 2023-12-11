@@ -1,8 +1,8 @@
 // TODO: unify export with index_file
 import {promptMenu} from './lib/tui/prompt_capabilities.js';
+import {ac, promptAsync} from './lib/tui/prompt.js';
 import {printLogo} from './lib/tui/print.js';
 import {RiceCooker} from './lib/core/rice_cooker.js';
-import {ac} from './lib/tui/prompt.js';
 
 /**
  * Gets menu according to the state of the rice cooker.
@@ -22,12 +22,20 @@ const getMenu = (cooker) => {
 };
 
 /**
+ * @return {Promise<RiceCooker>}
+ */
+const getRiceCooker = async () => {
+  const capacity = await promptAsync('Enter the rice cooker capacity in cup');
+  return new RiceCooker(capacity);
+};
+
+/**
  * entry point
  */
 async function main() {
   printLogo();
 
-  const cooker = new RiceCooker();
+  const cooker = await getRiceCooker();
 
   let exit = false;
   while (!exit) {

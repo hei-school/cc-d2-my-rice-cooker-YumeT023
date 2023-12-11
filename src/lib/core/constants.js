@@ -1,0 +1,1 @@
+export const DEFAULT_RICE_COOKER_CAPACITY_CUP = 5;

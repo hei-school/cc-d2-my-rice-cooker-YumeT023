@@ -1,16 +1,21 @@
+import {DEFAULT_RICE_COOKER_CAPACITY_CUP} from './constants.js';
+
 /**
  * This class simulates the behavior of a real rice cooker
  */
 export class RiceCooker {
   #isPlugged;
   #isLidOpen;
+  capacity;
 
   /**
+   * @param {number} capacity
    * @constructor
   */
-  constructor() {
+  constructor(capacity = DEFAULT_RICE_COOKER_CAPACITY_CUP) {
     this.#isPlugged = false;
     this.#isLidOpen = false;
+    this.capacity = capacity;
   }
 
   /**

@@ -28,6 +28,17 @@ export function prompt(query, cb) {
 }
 
 /**
+ * Promise-based prompt.
+ * @param {string} query
+ * @return {Promise<string>}
+ */
+export function promptAsync(query) {
+  return new Promise((resolve) => {
+    prompt(query, resolve);
+  });
+}
+
+/**
  * @param {string} description
  * @param {number} timeout
  * @param {function()} onCancel
