@@ -7,11 +7,12 @@ Mimics the behavior of a real rice cooker through command line interface.
 - [x] Plug/Unplug
 - [x] Open/Close the lid of the rice cooker
 - [ ] Place raw food into the inner pot of the rice cooker
-  - [ ] rice
+  - [x] rice
   - [ ] other kind of food   
+- [x] interactive timer while waiting
 - [ ] Set cooking mode and timer
-  - [ ] Cook
+  - [x] Cook
   - [ ] Keep warm
   - [ ] Steamer
-- [ ] Get the ready-to-serve cook (Emptying the pot)
-- [ ] Begin the cooking process
+- [x] Get the ready-to-serve cook (Emptying the pot)
+- [x] Begin the cooking process
