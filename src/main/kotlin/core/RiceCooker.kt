@@ -8,7 +8,7 @@ const val WATER_TO_RICE_RATIO = 0.5f
 
 class RiceCooker(val capacity: Float? = DEFAULT_RICE_COOKER_CAPACITY) {
     var isPlugged = false
-        private set(value) {
+        set(value) {
             if (value == field) {
                 Printer.info("The plug is already ${getTextualStatus().plug}")
             }
@@ -16,7 +16,7 @@ class RiceCooker(val capacity: Float? = DEFAULT_RICE_COOKER_CAPACITY) {
         }
 
     var isLidOpen = false
-        private set(value) {
+        set(value) {
             if (isPlugged) {
                 Printer.dangerous("You shouldn't be touching the lid")
             }
